@@ -94,13 +94,14 @@ export const ChatBot = () => {
   };
 
   return (
-    <div className="fixed bottom-[4vh] right-[4vw] z-50">
+    <div className="fixed bottom-[4vh] left-1/2 transform -translate-x-1/2 z-50">
       {!isOpen ? (
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-[4em] h-[4em] bg-teal-600 hover:bg-teal-700 shadow-lg animate-bounce"
+          className="w-[200px] h-[50px] bg-teal-600 hover:bg-teal-700 shadow-lg flex items-center justify-center gap-2"
         >
-          <MessageCircle className="w-[2em] h-[2em]" />
+          <MessageCircle className="w-[1.5em] h-[1.5em]" />
+          <span>تحدث معنا</span>
         </Button>
       ) : (
         <Card className="w-[90vw] sm:w-[24em] h-[80vh] flex flex-col rounded-2xl shadow-xl border-0 animate-scale-in">
