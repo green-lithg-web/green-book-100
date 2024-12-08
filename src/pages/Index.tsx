@@ -2,6 +2,7 @@ import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
 import { OrderSection } from "@/components/OrderSection";
 import { TableOfContents } from "@/components/TableOfContents";
+import { ChatBot } from "@/components/ChatBot";
 
 const Index = () => {
   return (
@@ -10,6 +11,7 @@ const Index = () => {
       <Features />
       <OrderSection />
       <TableOfContents />
+      <ChatBot />
     </div>
   );
 };
