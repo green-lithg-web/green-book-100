@@ -127,7 +127,7 @@ export const ChatBot = () => {
               <X className="w-5 h-5" />
             </Button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
             {messages.map((message, index) => (
               <ChatMessage key={index} {...message} />
             ))}
