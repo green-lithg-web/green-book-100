@@ -28,9 +28,25 @@ export const ChatBot = () => {
     window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ar-EG';
+    
+    // Set language to Arabic
+    utterance.lang = 'ar';
     utterance.rate = 0.9;
     utterance.pitch = 1;
+
+    // Get available voices
+    const voices = window.speechSynthesis.getVoices();
+    
+    // Try to find an Arabic voice
+    const arabicVoice = voices.find(voice => 
+      voice.lang.includes('ar') || 
+      voice.name.includes('Arabic') || 
+      voice.name.includes('ar')
+    );
+
+    if (arabicVoice) {
+      utterance.voice = arabicVoice;
+    }
 
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
@@ -103,6 +119,11 @@ export const ChatBot = () => {
   };
 
   useEffect(() => {
+    // Load voices when component mounts
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.getVoices();
+    };
+
     if (isOpen && !isMuted) {
       speak(INITIAL_MESSAGE);
     }
