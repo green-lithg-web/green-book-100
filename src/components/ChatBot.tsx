@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MessageCircle, X, Book, ShoppingCart, Truck, List, Smartphone, Bot, Send } from "lucide-react";
+import { MessageCircle, X, Book, ShoppingCart, Truck, List, Smartphone, Bot } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { ChatOptions } from "./ChatOptions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
 
 const INITIAL_MESSAGE = "مرحباً! أنا هنا لمساعدتك في معرفة المزيد عن كتبنا المميزة. كيف يمكنني مساعدتك اليوم؟";
 
@@ -22,7 +21,6 @@ export const ChatBot = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([
     { text: INITIAL_MESSAGE, isUser: false }
   ]);
-  const [inputMessage, setInputMessage] = useState("");
 
   useEffect(() => {
     const savedMessages = localStorage.getItem('chatHistory');
@@ -35,57 +33,64 @@ export const ChatBot = () => {
     localStorage.setItem('chatHistory', JSON.stringify(messages));
   }, [messages]);
 
-  const getResponse = (userMessage: string) => {
-    // تحويل النص إلى أحرف صغيرة للمقارنة
-    const message = userMessage.toLowerCase();
-    
-    if (message.includes("سعر") || message.includes("كم سعر") || message.includes("التكلفة")) {
-      return "سعر الكتاب 399 جنيه مصري. يمكنك طلبه الآن عبر واتساب.";
-    }
-    
-    if (message.includes("شحن") || message.includes("توصيل") || message.includes("دفع")) {
-      return "الشحن مجاني لجميع المحافظات والدفع عند الاستلام.";
-    }
-    
-    if (message.includes("محتوى") || message.includes("فهرس") || message.includes("موضوع")) {
-      return `الكتاب يحتوي على عشرة فصول تشمل:
+  const getResponse = (option: number) => {
+    switch (option) {
+      case 1:
+        return `الكتاب بعنوان "الحصن والعلاج"
+
+الكتاب مستند إلى أبحاث ومؤلفات علماء بارزين مثل:
+• الشيخ ابن باز
+• الشيخ ابن عثيمين
+• الشيخ خالد الحبيشي
+
+الوصف:
+يقدم هذا الكتاب دليلاً شاملاً ومبسطًا حول:
 • عالم الجن ومفهوم الرقية
 • الحسد، العين، السحر، وحالات المس
 • كيفية تحصين المنازل
 • حلول عملية للتعامل مع الوسواس القهري
 • مناقشة موضوع الكهانة وادعاء علم الغيب`;
-    }
-    
-    if (message.includes("طلب") || message.includes("شراء") || message.includes("اشتري")) {
-      return "يمكنك طلب الكتاب عبر واتساب على الرقم 01030435987";
-    }
 
-    return "شكراً لتواصلك معنا. هل يمكنني مساعدتك في معرفة المزيد عن الكتاب أو طريقة الطلب؟";
+      case 2:
+        return `يمكنك طلب الكتاب بسهولة عبر:
+
+1. الضغط على زر "طلب الكتاب الآن" في صفحتنا
+2. التواصل معنا عبر رقم خدمة العملاء أو الواتساب`;
+
+      case 3:
+        return `معلومات الشحن والدفع:
+
+• الشحن مجاني لجميع المحافظات
+• الدفع عند الاستلام`;
+
+      case 4:
+        return `فهرس الكتاب:
+
+الفصل الأول: عالم الجن (من صفحة 3 إلى 35)
+الفصل الثاني: مفهوم الرقية (من صفحة 36 إلى 47)
+الفصل الثالث: كيف تكون معالجاً بالقرآن والسنة (من صفحة 48 إلى 63)
+الفصل الرابع: السحر (من صفحة 64 إلى 100)
+الفصل الخامس: العين (من صفحة 101 إلى 117)
+الفصل السادس: الحسد (من صفحة 118 إلى 135)
+الفصل السابع: المس (حالات المس والسحر) (من صفحة 136 إلى 171)
+الفصل الثامن: الوسواس القهري (من صفحة 172 إلى 182)
+الفصل التاسع: تحصين البيت (من صفحة 183 إلى 195)
+الفصل العاشر: الكهانة وادعاء علم الغيب في الإسلام (من صفحة 196 إلى 203)`;
+
+      case 5:
+        return "نعم، تتوفر نسخة إلكترونية من الكتاب. يمكنك الحصول عليها من خلال الرابط المتاح في الموقع.";
+
+      default:
+        return INITIAL_MESSAGE;
+    }
   };
 
   const handleOptionClick = (option: number) => {
-    const response = getResponse(OPTIONS[option - 1].text);
+    const response = getResponse(option);
     setMessages(prev => [...prev, 
       { text: OPTIONS[option - 1].text, isUser: true },
       { text: response, isUser: false }
     ]);
-  };
-
-  const handleSendMessage = () => {
-    if (inputMessage.trim()) {
-      const response = getResponse(inputMessage);
-      setMessages(prev => [...prev,
-        { text: inputMessage, isUser: true },
-        { text: response, isUser: false }
-      ]);
-      setInputMessage("");
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSendMessage();
-    }
   };
 
   return (
@@ -123,24 +128,7 @@ export const ChatBot = () => {
               <ChatMessage key={index} {...message} />
             ))}
           </div>
-          <div className="p-[1em] bg-gray-50 border-t">
-            <div className="flex gap-[0.5em]">
-              <Input
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="اكتب رسالتك هنا..."
-                className="flex-1 text-right"
-              />
-              <Button 
-                onClick={handleSendMessage}
-                className="bg-teal-600 hover:bg-teal-700"
-              >
-                <Send className="w-[1.25em] h-[1.25em]" />
-              </Button>
-            </div>
-            <ChatOptions options={OPTIONS} onOptionClick={handleOptionClick} />
-          </div>
+          <ChatOptions options={OPTIONS} onOptionClick={handleOptionClick} />
         </Card>
       )}
     </div>
