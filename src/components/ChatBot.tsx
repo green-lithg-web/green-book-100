@@ -22,7 +22,6 @@ export const ChatBot = () => {
     { text: INITIAL_MESSAGE, isUser: false }
   ]);
 
-  // استرجاع المحادثات السابقة من التخزين المحلي
   useEffect(() => {
     const savedMessages = localStorage.getItem('chatHistory');
     if (savedMessages) {
@@ -30,7 +29,6 @@ export const ChatBot = () => {
     }
   }, []);
 
-  // حفظ المحادثات في التخزين المحلي
   useEffect(() => {
     localStorage.setItem('chatHistory', JSON.stringify(messages));
   }, [messages]);
@@ -102,13 +100,13 @@ export const ChatBot = () => {
       {!isOpen ? (
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-[4em] h-[4em] bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-lg animate-bounce"
+          className="rounded-full w-[4em] h-[4em] bg-teal-600 hover:bg-teal-700 shadow-lg animate-bounce"
         >
           <MessageCircle className="w-[2em] h-[2em]" />
         </Button>
       ) : (
         <Card className="w-[90vw] sm:w-[24em] h-[80vh] flex flex-col rounded-2xl shadow-xl border-0 animate-scale-in">
-          <div className="p-[1em] bg-gradient-to-r from-primary to-accent text-white rounded-t-2xl flex justify-between items-center">
+          <div className="p-[1em] bg-teal-600 text-white rounded-t-2xl flex justify-between items-center">
             <div className="flex items-center gap-[0.5em]">
               <Avatar className="h-[2em] w-[2em] border-2 border-white/20">
                 <AvatarImage src="/lovable-uploads/0654bb37-4204-44f1-a06e-5211a731cbee.png" alt="Bot Avatar" />
@@ -122,7 +120,7 @@ export const ChatBot = () => {
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
-              className="hover:bg-white/20 text-white"
+              className="hover:bg-teal-700 text-white"
             >
               <X className="w-[1.25em] h-[1.25em]" />
             </Button>
