@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MessageCircle, X, Book, ShoppingCart, Truck, List, Smartphone } from "lucide-react";
+import { MessageCircle, X, Book, ShoppingCart, Truck, List, Smartphone, Bot } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { ChatOptions } from "./ChatOptions";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const INITIAL_MESSAGE = "مرحباً! أنا هنا لمساعدتك في معرفة المزيد عن كتبنا المميزة. كيف يمكنني مساعدتك اليوم؟";
 
@@ -20,6 +21,19 @@ export const ChatBot = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([
     { text: INITIAL_MESSAGE, isUser: false }
   ]);
+
+  // استرجاع المحادثات السابقة من التخزين المحلي
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatHistory');
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    }
+  }, []);
+
+  // حفظ المحادثات في التخزين المحلي
+  useEffect(() => {
+    localStorage.setItem('chatHistory', JSON.stringify(messages));
+  }, [messages]);
 
   const getResponse = (option: number) => {
     switch (option) {
@@ -95,7 +109,15 @@ export const ChatBot = () => {
       ) : (
         <Card className="w-96 h-[600px] flex flex-col rounded-2xl shadow-xl border-0 animate-scale-in">
           <div className="p-4 bg-gradient-to-r from-primary to-accent text-white rounded-t-2xl flex justify-between items-center">
-            <span className="text-lg font-semibold">خدمة العملاء</span>
+            <div className="flex items-center gap-2">
+              <Avatar className="h-8 w-8 border-2 border-white/20">
+                <AvatarImage src="/lovable-uploads/0521ca68-3291-411e-b4ae-376e68abda36.png" />
+                <AvatarFallback>
+                  <Bot className="w-4 h-4" />
+                </AvatarFallback>
+              </Avatar>
+              <span className="text-lg font-semibold">خدمة العملاء</span>
+            </div>
             <Button
               variant="ghost"
               size="icon"
@@ -105,7 +127,7 @@ export const ChatBot = () => {
               <X className="w-5 h-5" />
             </Button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white">
             {messages.map((message, index) => (
               <ChatMessage key={index} {...message} />
             ))}

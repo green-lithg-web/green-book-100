@@ -14,7 +14,7 @@ export const TypewriterText = ({ text, onComplete }: TypewriterTextProps) => {
       const timeout = setTimeout(() => {
         setDisplayedText(prev => prev + text[currentIndex]);
         setCurrentIndex(currentIndex + 1);
-      }, 30);
+      }, 15); // تم تقليل وقت التأخير لجعل الكتابة أسرع
 
       return () => clearTimeout(timeout);
     } else if (onComplete) {
@@ -22,5 +22,5 @@ export const TypewriterText = ({ text, onComplete }: TypewriterTextProps) => {
     }
   }, [currentIndex, text, onComplete]);
 
-  return <span>{displayedText}</span>;
+  return <span className="font-arabic text-base">{displayedText}</span>;
 };
