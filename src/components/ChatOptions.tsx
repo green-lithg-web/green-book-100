@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { Book, ShoppingCart, Truck, List, Smartphone } from "lucide-react";
 
 interface ChatOption {
   id: number;
   text: string;
+  icon: JSX.Element;
 }
 
 interface ChatOptionsProps {
@@ -20,6 +22,7 @@ export const ChatOptions = ({ options, onOptionClick }: ChatOptionsProps) => {
           variant="outline"
           className="text-right justify-start hover:bg-primary/5 border-primary/20"
         >
+          <span className="ml-2">{option.icon}</span>
           {option.text}
         </Button>
       ))}

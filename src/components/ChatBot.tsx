@@ -1,19 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MessageCircle, X, VolumeX, Volume2 } from "lucide-react";
+import { MessageCircle, X, Book, ShoppingCart, Truck, List, Smartphone } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { ChatOptions } from "./ChatOptions";
-import { speakArabicText } from "../utils/speechUtils";
 
 const INITIAL_MESSAGE = "مرحباً! أنا هنا لمساعدتك في معرفة المزيد عن كتبنا المميزة. كيف يمكنني مساعدتك اليوم؟";
 
 const OPTIONS = [
-  { id: 1, text: "معلومات عن الكتاب" },
-  { id: 2, text: "كيفية الطلب" },
-  { id: 3, text: "معلومات الشحن والدفع" },
-  { id: 4, text: "فهرس الكتاب" },
-  { id: 5, text: "هل يتوفر إصدار إلكتروني؟" }
+  { id: 1, text: "معلومات عن الكتاب", icon: <Book className="w-4 h-4" /> },
+  { id: 2, text: "كيفية الطلب", icon: <ShoppingCart className="w-4 h-4" /> },
+  { id: 3, text: "معلومات الشحن والدفع", icon: <Truck className="w-4 h-4" /> },
+  { id: 4, text: "فهرس الكتاب", icon: <List className="w-4 h-4" /> },
+  { id: 5, text: "هل يتوفر إصدار إلكتروني؟", icon: <Smartphone className="w-4 h-4" /> }
 ];
 
 export const ChatBot = () => {
@@ -21,8 +20,6 @@ export const ChatBot = () => {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([
     { text: INITIAL_MESSAGE, isUser: false }
   ]);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
 
   const getResponse = (option: number) => {
     switch (option) {
@@ -84,55 +81,21 @@ export const ChatBot = () => {
       { text: OPTIONS[option - 1].text, isUser: true },
       { text: response, isUser: false }
     ]);
-    
-    if (!isMuted) {
-      speakArabicText(response, 
-        () => setIsSpeaking(true),
-        () => setIsSpeaking(false)
-      );
-    }
   };
-
-  useEffect(() => {
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.getVoices();
-    };
-
-    if (isOpen && !isMuted) {
-      speakArabicText(INITIAL_MESSAGE,
-        () => setIsSpeaking(true),
-        () => setIsSpeaking(false)
-      );
-    }
-    
-    return () => {
-      window.speechSynthesis.cancel();
-    };
-  }, [isOpen, isMuted]);
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {!isOpen ? (
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-16 h-16 bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-lg"
+          className="rounded-full w-16 h-16 bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-lg animate-bounce"
         >
           <MessageCircle className="w-8 h-8" />
         </Button>
       ) : (
-        <Card className="w-96 h-[600px] flex flex-col rounded-2xl shadow-xl border-0">
+        <Card className="w-96 h-[600px] flex flex-col rounded-2xl shadow-xl border-0 animate-scale-in">
           <div className="p-4 bg-gradient-to-r from-primary to-accent text-white rounded-t-2xl flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-semibold">خدمة العملاء</span>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsMuted(!isMuted)}
-                className="hover:bg-white/20 text-white"
-              >
-                {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-              </Button>
-            </div>
+            <span className="text-lg font-semibold">خدمة العملاء</span>
             <Button
               variant="ghost"
               size="icon"
