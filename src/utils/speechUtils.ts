@@ -2,13 +2,19 @@ export const setupArabicSpeech = (text: string): SpeechSynthesisUtterance => {
   const utterance = new SpeechSynthesisUtterance(text);
   
   // تعيين اللغة العربية
-  utterance.lang = 'ar-EG';  // استخدام اللهجة المصرية
-  utterance.rate = 0.9;      // إبطاء سرعة النطق قليلاً
+  utterance.lang = 'ar-SA';  // تجربة اللهجة السعودية بدلاً من المصرية
+  utterance.rate = 0.8;      // إبطاء السرعة أكثر للوضوح
   utterance.pitch = 1;
-  utterance.volume = 1;      // رفع مستوى الصوت
+  utterance.volume = 1;
 
-  // الحصول على الأصوات المتاحة
-  const voices = window.speechSynthesis.getVoices();
+  // تحميل الأصوات المتاحة بشكل متزامن
+  let voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) {
+    // إذا لم يتم تحميل الأصوات بعد، انتظر حتى يتم تحميلها
+    window.speechSynthesis.onvoiceschanged = () => {
+      voices = window.speechSynthesis.getVoices();
+    };
+  }
   
   // البحث عن صوت عربي
   const arabicVoice = voices.find(voice => 
@@ -18,7 +24,10 @@ export const setupArabicSpeech = (text: string): SpeechSynthesisUtterance => {
   );
 
   if (arabicVoice) {
+    console.log('تم العثور على صوت عربي:', arabicVoice.name);
     utterance.voice = arabicVoice;
+  } else {
+    console.log('لم يتم العثور على صوت عربي، استخدام الصوت الافتراضي');
   }
 
   return utterance;
@@ -34,10 +43,23 @@ export const speakArabicText = (text: string, onStart?: () => void, onEnd?: () =
     .replace(/\s+/g, ' ')                  // تقليل المسافات المتعددة إلى مسافة واحدة
     .trim();                               // إزالة المسافات من البداية والنهاية
 
+  console.log('النص المنظف:', cleanText);
+
   const utterance = setupArabicSpeech(cleanText);
   
-  if (onStart) utterance.onstart = onStart;
-  if (onEnd) utterance.onend = onEnd;
+  if (onStart) {
+    utterance.onstart = () => {
+      console.log('بدأ النطق');
+      onStart();
+    };
+  }
+  
+  if (onEnd) {
+    utterance.onend = () => {
+      console.log('انتهى النطق');
+      onEnd();
+    };
+  }
   
   utterance.onerror = (event) => {
     console.error('خطأ في النطق:', event);
@@ -46,7 +68,14 @@ export const speakArabicText = (text: string, onStart?: () => void, onEnd?: () =
 
   // محاولة النطق
   try {
-    window.speechSynthesis.speak(utterance);
+    // تأكد من أن النص غير فارغ
+    if (cleanText.trim()) {
+      window.speechSynthesis.speak(utterance);
+      console.log('تم بدء عملية النطق');
+    } else {
+      console.warn('النص فارغ، تم تخطي النطق');
+      if (onEnd) onEnd();
+    }
   } catch (error) {
     console.error('خطأ في بدء النطق:', error);
     if (onEnd) onEnd();
