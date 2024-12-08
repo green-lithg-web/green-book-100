@@ -1,4 +1,4 @@
-import { BookOpen, Shield, Brain, Home, Eye, Magic } from "lucide-react";
+import { BookOpen, Shield, Brain, Home, Eye, Wand2 } from "lucide-react";
 
 const features = [
   {
@@ -27,7 +27,7 @@ const features = [
     description: "كيفية الوقاية والعلاج من العين والحسد"
   },
   {
-    icon: Magic,
+    icon: Wand2,
     title: "علاج السحر",
     description: "طرق التعامل مع السحر والمس"
   }
