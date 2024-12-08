@@ -9,11 +9,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const INITIAL_MESSAGE = "مرحباً! أنا هنا لمساعدتك في معرفة المزيد عن كتبنا المميزة. كيف يمكنني مساعدتك اليوم؟";
 
 const OPTIONS = [
-  { id: 1, text: "معلومات الكتاب", icon: <Book className="w-5 h-5" /> },
-  { id: 2, text: "طلب الكتاب", icon: <ShoppingCart className="w-5 h-5" /> },
-  { id: 3, text: "الشحن والدفع", icon: <Truck className="w-5 h-5" /> },
-  { id: 4, text: "فهرس الكتاب", icon: <List className="w-5 h-5" /> },
-  { id: 5, text: "النسخة الإلكترونية", icon: <Smartphone className="w-5 h-5" /> }
+  { id: 1, text: "معلومات الكتاب", icon: <Book className="w-[1.25em] h-[1.25em]" /> },
+  { id: 2, text: "طلب الكتاب", icon: <ShoppingCart className="w-[1.25em] h-[1.25em]" /> },
+  { id: 3, text: "الشحن والدفع", icon: <Truck className="w-[1.25em] h-[1.25em]" /> },
+  { id: 4, text: "فهرس الكتاب", icon: <List className="w-[1.25em] h-[1.25em]" /> },
+  { id: 5, text: "النسخة الإلكترونية", icon: <Smartphone className="w-[1.25em] h-[1.25em]" /> }
 ];
 
 export const ChatBot = () => {
@@ -98,25 +98,25 @@ export const ChatBot = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-[4vh] right-[4vw] z-50">
       {!isOpen ? (
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-16 h-16 bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-lg animate-bounce"
+          className="rounded-full w-[4em] h-[4em] bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-lg animate-bounce"
         >
-          <MessageCircle className="w-8 h-8" />
+          <MessageCircle className="w-[2em] h-[2em]" />
         </Button>
       ) : (
-        <Card className="w-96 h-[600px] flex flex-col rounded-2xl shadow-xl border-0 animate-scale-in">
-          <div className="p-4 bg-gradient-to-r from-primary to-accent text-white rounded-t-2xl flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <Avatar className="h-8 w-8 border-2 border-white/20">
+        <Card className="w-[90vw] sm:w-[24em] h-[80vh] flex flex-col rounded-2xl shadow-xl border-0 animate-scale-in">
+          <div className="p-[1em] bg-gradient-to-r from-primary to-accent text-white rounded-t-2xl flex justify-between items-center">
+            <div className="flex items-center gap-[0.5em]">
+              <Avatar className="h-[2em] w-[2em] border-2 border-white/20">
                 <AvatarImage src="/lovable-uploads/0654bb37-4204-44f1-a06e-5211a731cbee.png" alt="Bot Avatar" />
                 <AvatarFallback>
-                  <Bot className="w-4 h-4" />
+                  <Bot className="w-[1em] h-[1em]" />
                 </AvatarFallback>
               </Avatar>
-              <span className="text-lg font-semibold">خدمة العملاء</span>
+              <span className="text-[1.125em] font-semibold">خدمة العملاء</span>
             </div>
             <Button
               variant="ghost"
@@ -124,10 +124,10 @@ export const ChatBot = () => {
               onClick={() => setIsOpen(false)}
               className="hover:bg-white/20 text-white"
             >
-              <X className="w-5 h-5" />
+              <X className="w-[1.25em] h-[1.25em]" />
             </Button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
+          <div className="flex-1 overflow-y-auto p-[1em] space-y-[1em] bg-white">
             {messages.map((message, index) => (
               <ChatMessage key={index} {...message} />
             ))}

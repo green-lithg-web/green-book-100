@@ -9,17 +9,17 @@ interface ChatMessageProps {
 
 export const ChatMessage = ({ text, isUser }: ChatMessageProps) => {
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4 animate-fade-in items-end gap-2`}>
+    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-[1em] animate-fade-in items-end gap-[0.5em]`}>
       {!isUser && (
-        <Avatar className="h-8 w-8">
+        <Avatar className="h-[2em] w-[2em]">
           <AvatarImage src="/lovable-uploads/0654bb37-4204-44f1-a06e-5211a731cbee.png" alt="Bot Avatar" />
           <AvatarFallback>
-            <Bot className="w-4 h-4" />
+            <Bot className="w-[1em] h-[1em]" />
           </AvatarFallback>
         </Avatar>
       )}
       <div
-        className={`rounded-2xl p-4 max-w-[80%] whitespace-pre-wrap shadow-sm font-arabic ${
+        className={`rounded-2xl p-[1em] max-w-[80%] whitespace-pre-wrap shadow-sm font-arabic ${
           isUser
             ? "bg-gradient-to-r from-primary to-accent text-white"
             : "bg-gradient-to-r from-white to-gray-50 text-gray-900 border border-gray-100"
@@ -28,9 +28,9 @@ export const ChatMessage = ({ text, isUser }: ChatMessageProps) => {
         {isUser ? text : <TypewriterText text={text} />}
       </div>
       {isUser && (
-        <Avatar className="h-8 w-8">
+        <Avatar className="h-[2em] w-[2em]">
           <AvatarFallback>
-            <User className="w-4 h-4" />
+            <User className="w-[1em] h-[1em]" />
           </AvatarFallback>
         </Avatar>
       )}
