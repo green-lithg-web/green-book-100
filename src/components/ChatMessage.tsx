@@ -12,7 +12,7 @@ export const ChatMessage = ({ text, isUser }: ChatMessageProps) => {
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4 animate-fade-in items-end gap-2`}>
       {!isUser && (
         <Avatar className="h-8 w-8">
-          <AvatarImage src="/lovable-uploads/0521ca68-3291-411e-b4ae-376e68abda36.png" />
+          <AvatarImage src="/lovable-uploads/0654bb37-4204-44f1-a06e-5211a731cbee.png" />
           <AvatarFallback>
             <Bot className="w-4 h-4" />
           </AvatarFallback>
