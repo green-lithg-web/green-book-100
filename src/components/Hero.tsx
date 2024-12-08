@@ -20,7 +20,6 @@ export const Hero = () => {
             <p className="text-[4vmin] md:text-[2.5vmin] mb-[4vh] text-teal-100">
               تعلم كيف تحصن نفسك وأهلك من الحسد والمس والسحر من القرآن والسنة النبوية
             </p>
-            <ChatBot />
           </div>
           <div className="w-full md:w-1/2">
             {!imageLoaded && (
@@ -35,6 +34,9 @@ export const Hero = () => {
               loading="lazy"
             />
           </div>
+        </div>
+        <div className="mt-[4vh] flex justify-center">
+          <ChatBot />
         </div>
       </div>
     </div>
