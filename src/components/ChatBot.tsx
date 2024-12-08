@@ -9,11 +9,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const INITIAL_MESSAGE = "مرحباً! أنا هنا لمساعدتك في معرفة المزيد عن كتبنا المميزة. كيف يمكنني مساعدتك اليوم؟";
 
 const OPTIONS = [
-  { id: 1, text: "معلومات عن الكتاب", icon: <Book className="w-4 h-4" /> },
-  { id: 2, text: "كيفية الطلب", icon: <ShoppingCart className="w-4 h-4" /> },
-  { id: 3, text: "معلومات الشحن والدفع", icon: <Truck className="w-4 h-4" /> },
-  { id: 4, text: "فهرس الكتاب", icon: <List className="w-4 h-4" /> },
-  { id: 5, text: "هل يتوفر إصدار إلكتروني؟", icon: <Smartphone className="w-4 h-4" /> }
+  { id: 1, text: "معلومات الكتاب", icon: <Book className="w-5 h-5" /> },
+  { id: 2, text: "طلب الكتاب", icon: <ShoppingCart className="w-5 h-5" /> },
+  { id: 3, text: "الشحن والدفع", icon: <Truck className="w-5 h-5" /> },
+  { id: 4, text: "فهرس الكتاب", icon: <List className="w-5 h-5" /> },
+  { id: 5, text: "النسخة الإلكترونية", icon: <Smartphone className="w-5 h-5" /> }
 ];
 
 export const ChatBot = () => {

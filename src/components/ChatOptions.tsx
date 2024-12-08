@@ -20,10 +20,10 @@ export const ChatOptions = ({ options, onOptionClick }: ChatOptionsProps) => {
           key={option.id}
           onClick={() => onOptionClick(option.id)}
           variant="outline"
-          className="text-right justify-start text-gray-800 hover:bg-white/50 border-primary/20 bg-white/90 font-semibold text-sm shadow-sm hover:shadow-md transition-all duration-300"
+          className="flex items-center justify-center gap-3 px-4 py-3 text-base font-bold text-gray-800 bg-white hover:bg-primary/5 border-2 border-primary/20 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 min-h-[3.5rem]"
         >
-          <span className="ml-2 text-primary">{option.icon}</span>
-          {option.text}
+          <span className="text-primary">{option.icon}</span>
+          <span className="text-right line-clamp-1">{option.text}</span>
         </Button>
       ))}
     </div>
