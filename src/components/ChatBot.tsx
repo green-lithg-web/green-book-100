@@ -111,7 +111,7 @@ export const ChatBot = () => {
           <div className="p-4 bg-gradient-to-r from-primary to-accent text-white rounded-t-2xl flex justify-between items-center">
             <div className="flex items-center gap-2">
               <Avatar className="h-8 w-8 border-2 border-white/20">
-                <AvatarImage src="/lovable-uploads/0654bb37-4204-44f1-a06e-5211a731cbee.png" />
+                <AvatarImage src="/lovable-uploads/0654bb37-4204-44f1-a06e-5211a731cbee.png" alt="Bot Avatar" />
                 <AvatarFallback>
                   <Bot className="w-4 h-4" />
                 </AvatarFallback>
