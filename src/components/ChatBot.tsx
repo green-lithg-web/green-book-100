@@ -94,7 +94,6 @@ export const ChatBot = () => {
   };
 
   useEffect(() => {
-    // Load voices when component mounts
     window.speechSynthesis.onvoiceschanged = () => {
       window.speechSynthesis.getVoices();
     };
@@ -112,38 +111,38 @@ export const ChatBot = () => {
   }, [isOpen, isMuted]);
 
   return (
-    <div className="fixed bottom-4 left-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50">
       {!isOpen ? (
         <Button
           onClick={() => setIsOpen(true)}
-          className="rounded-full w-14 h-14 bg-primary hover:bg-primary/90"
+          className="rounded-full w-16 h-16 bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-lg"
         >
-          <MessageCircle className="w-6 h-6" />
+          <MessageCircle className="w-8 h-8" />
         </Button>
       ) : (
-        <Card className="w-96 h-[600px] flex flex-col">
-          <div className="p-3 bg-primary text-white flex justify-between items-center">
+        <Card className="w-96 h-[600px] flex flex-col rounded-2xl shadow-xl border-0">
+          <div className="p-4 bg-gradient-to-r from-primary to-accent text-white rounded-t-2xl flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <span>خدمة العملاء</span>
+              <span className="text-lg font-semibold">خدمة العملاء</span>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsMuted(!isMuted)}
-                className="hover:bg-primary/90 text-white"
+                className="hover:bg-white/20 text-white"
               >
-                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
               </Button>
             </div>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsOpen(false)}
-              className="hover:bg-primary/90 text-white"
+              className="hover:bg-white/20 text-white"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </Button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 text-right">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((message, index) => (
               <ChatMessage key={index} {...message} />
             ))}

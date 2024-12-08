@@ -12,13 +12,13 @@ interface ChatOptionsProps {
 
 export const ChatOptions = ({ options, onOptionClick }: ChatOptionsProps) => {
   return (
-    <div className="p-3 border-t grid grid-cols-2 gap-2">
+    <div className="p-4 border-t grid grid-cols-2 gap-3 bg-gray-50/50 rounded-b-2xl">
       {options.map((option) => (
         <Button
           key={option.id}
           onClick={() => onOptionClick(option.id)}
           variant="outline"
-          className="text-right justify-start"
+          className="text-right justify-start hover:bg-primary/5 border-primary/20"
         >
           {option.text}
         </Button>

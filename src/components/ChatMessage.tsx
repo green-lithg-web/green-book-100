@@ -5,12 +5,12 @@ interface ChatMessageProps {
 
 export const ChatMessage = ({ text, isUser }: ChatMessageProps) => {
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+    <div className={`flex ${isUser ? "justify-start" : "justify-end"} mb-4`}>
       <div
-        className={`rounded-lg p-3 max-w-[90%] whitespace-pre-wrap ${
+        className={`rounded-2xl p-4 max-w-[90%] whitespace-pre-wrap shadow-sm ${
           isUser
-            ? "bg-primary text-white"
-            : "bg-gray-100 text-gray-800"
+            ? "bg-gradient-to-r from-primary to-accent text-white"
+            : "bg-gradient-to-r from-secondary/20 to-secondary/10 text-gray-800"
         }`}
       >
         {text}
