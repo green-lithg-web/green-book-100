@@ -5,9 +5,17 @@ export const OrderSection = () => {
   const { toast } = useToast();
 
   const handleOrder = () => {
+    // رابط الواتساب مع رسالة مخصصة
+    const whatsappNumber = "01030435987";
+    const message = "السلام عليكم، أود طلب كتاب الحصن والعلاج";
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    
+    // فتح رابط الواتساب في نافذة جديدة
+    window.open(whatsappUrl, '_blank');
+    
     toast({
-      title: "تم استلام طلبك",
-      description: "سنتواصل معك قريباً لتأكيد الطلب",
+      title: "جاري تحويلك إلى واتساب",
+      description: "سيتم فتح محادثة واتساب للتواصل معنا",
     });
   };
 
@@ -35,7 +43,7 @@ export const OrderSection = () => {
             onClick={handleOrder}
             className="w-full bg-secondary hover:bg-secondary/90 text-white py-6 text-xl"
           >
-            اطلب الآن
+            اطلب عبر واتساب
           </Button>
         </div>
       </div>
