@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MessageCircle, X, VolumeX, Volume2 } from "lucide-react";
+import { ChatMessage } from "./ChatMessage";
+import { ChatOptions } from "./ChatOptions";
+import { speakArabicText } from "../utils/speechUtils";
 
 const INITIAL_MESSAGE = "مرحباً! أنا هنا لمساعدتك في معرفة المزيد عن كتبنا المميزة. كيف يمكنني مساعدتك اليوم؟";
 
@@ -20,40 +23,6 @@ export const ChatBot = () => {
   ]);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-
-  const speak = (text: string) => {
-    if (isMuted) return;
-    
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    
-    // Set language to Arabic
-    utterance.lang = 'ar';
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-
-    // Get available voices
-    const voices = window.speechSynthesis.getVoices();
-    
-    // Try to find an Arabic voice
-    const arabicVoice = voices.find(voice => 
-      voice.lang.includes('ar') || 
-      voice.name.includes('Arabic') || 
-      voice.name.includes('ar')
-    );
-
-    if (arabicVoice) {
-      utterance.voice = arabicVoice;
-    }
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    window.speechSynthesis.speak(utterance);
-  };
 
   const getResponse = (option: number) => {
     switch (option) {
@@ -115,7 +84,13 @@ export const ChatBot = () => {
       { text: OPTIONS[option - 1].text, isUser: true },
       { text: response, isUser: false }
     ]);
-    speak(response);
+    
+    if (!isMuted) {
+      speakArabicText(response, 
+        () => setIsSpeaking(true),
+        () => setIsSpeaking(false)
+      );
+    }
   };
 
   useEffect(() => {
@@ -125,8 +100,12 @@ export const ChatBot = () => {
     };
 
     if (isOpen && !isMuted) {
-      speak(INITIAL_MESSAGE);
+      speakArabicText(INITIAL_MESSAGE,
+        () => setIsSpeaking(true),
+        () => setIsSpeaking(false)
+      );
     }
+    
     return () => {
       window.speechSynthesis.cancel();
     };
@@ -166,34 +145,10 @@ export const ChatBot = () => {
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-4 text-right">
             {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}
-              >
-                <div
-                  className={`rounded-lg p-3 max-w-[90%] whitespace-pre-wrap ${
-                    message.isUser
-                      ? "bg-primary text-white"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  {message.text}
-                </div>
-              </div>
+              <ChatMessage key={index} {...message} />
             ))}
           </div>
-          <div className="p-3 border-t grid grid-cols-2 gap-2">
-            {OPTIONS.map((option) => (
-              <Button
-                key={option.id}
-                onClick={() => handleOptionClick(option.id)}
-                variant="outline"
-                className="text-right justify-start"
-              >
-                {option.text}
-              </Button>
-            ))}
-          </div>
+          <ChatOptions options={OPTIONS} onOptionClick={handleOptionClick} />
         </Card>
       )}
     </div>
