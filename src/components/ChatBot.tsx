@@ -1,34 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, VolumeX, Volume2 } from "lucide-react";
+
+const INITIAL_MESSAGE = "مرحباً! أنا هنا لمساعدتك في معرفة المزيد عن كتبنا المميزة. كيف يمكنني مساعدتك اليوم؟";
+
+const OPTIONS = [
+  { id: 1, text: "معلومات عن الكتاب" },
+  { id: 2, text: "كيفية الطلب" },
+  { id: 3, text: "معلومات الشحن والدفع" },
+  { id: 4, text: "فهرس الكتاب" },
+  { id: 5, text: "هل يتوفر إصدار إلكتروني؟" }
+];
 
 export const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([
-    { text: "مرحباً! أنا هنا لمساعدتك في معرفة المزيد عن كتبنا المميزة. كيف يمكنني مساعدتك اليوم؟\n\nيمكنك اختيار أحد الخيارات التالية:\n1. معلومات عن الكتاب\n2. كيفية الطلب\n3. معلومات الشحن والدفع\n4. فهرس الكتاب\n5. هل يتوفر إصدار إلكتروني؟", isUser: false },
+    { text: INITIAL_MESSAGE, isUser: false }
   ]);
-  const [input, setInput] = useState("");
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const speak = (text: string) => {
+    if (isMuted) return;
+    
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
 
-    setMessages([...messages, { text: input, isUser: true }]);
-    setInput("");
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ar-EG';
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
 
-    setTimeout(() => {
-      const response = getResponse(input);
-      setMessages(prev => [...prev, { text: response, isUser: false }]);
-    }, 1000);
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    window.speechSynthesis.speak(utterance);
   };
 
-  const getResponse = (question: string) => {
-    const lowerQuestion = question.toLowerCase();
-    
-    // معلومات عن الكتاب
-    if (lowerQuestion.includes("معلومات") || lowerQuestion.includes("الكتاب") || lowerQuestion.includes("1")) {
-      return `الكتاب بعنوان "الحصن والعلاج"
+  const getResponse = (option: number) => {
+    switch (option) {
+      case 1:
+        return `الكتاب بعنوان "الحصن والعلاج"
 
 الكتاب مستند إلى أبحاث ومؤلفات علماء بارزين مثل:
 • الشيخ ابن باز
@@ -38,39 +52,27 @@ export const ChatBot = () => {
 السعر: 399 جنيه مصري
 
 الوصف:
-يقدم هذا الكتاب دليلاً شاملاً ومبسطاً حول:
+يقدم هذا الكتاب دليلاً شاملاً ومبسطًا حول:
 • عالم الجن ومفهوم الرقية
 • الحسد، العين، السحر، وحالات المس
 • كيفية تحصين المنازل
 • حلول عملية للتعامل مع الوسواس القهري
-• مناقشة موضوع الكهانة وادعاء علم الغيب
+• مناقشة موضوع الكهانة وادعاء علم الغيب`;
 
-هل ترغب في معرفة المزيد عن كيفية طلب الكتاب أو تفاصيل إضافية؟`;
-    }
-
-    // كيفية الطلب
-    if (lowerQuestion.includes("طلب") || lowerQuestion.includes("شراء") || lowerQuestion.includes("2")) {
-      return `يمكنك طلب الكتاب بسهولة عبر:
+      case 2:
+        return `يمكنك طلب الكتاب بسهولة عبر:
 
 1. الضغط على زر "طلب الكتاب الآن" في صفحتنا
-2. التواصل معنا عبر رقم خدمة العملاء أو الواتساب
+2. التواصل معنا عبر رقم خدمة العملاء أو الواتساب`;
 
-هل ترغب في معرفة طريقة الدفع والشحن؟`;
-    }
-
-    // معلومات الشحن والدفع
-    if (lowerQuestion.includes("شحن") || lowerQuestion.includes("دفع") || lowerQuestion.includes("3")) {
-      return `معلومات الشحن والدفع:
+      case 3:
+        return `معلومات الشحن والدفع:
 
 • الشحن مجاني لجميع المحافظات
-• الدفع عند الاستلام
+• الدفع عند الاستلام`;
 
-هل ترغب في معرفة فهرس الكتاب أو تفاصيل إضافية؟`;
-    }
-
-    // فهرس الكتاب
-    if (lowerQuestion.includes("فهرس") || lowerQuestion.includes("محتويات") || lowerQuestion.includes("4")) {
-      return `فهرس الكتاب:
+      case 4:
+        return `فهرس الكتاب:
 
 الفصل الأول: عالم الجن (من صفحة 3 إلى 35)
 الفصل الثاني: مفهوم الرقية (من صفحة 36 إلى 47)
@@ -81,18 +83,33 @@ export const ChatBot = () => {
 الفصل السابع: المس (حالات المس والسحر) (من صفحة 136 إلى 171)
 الفصل الثامن: الوسواس القهري (من صفحة 172 إلى 182)
 الفصل التاسع: تحصين البيت (من صفحة 183 إلى 195)
-الفصل العاشر: الكهانة وادعاء علم الغيب في الإسلام (من صفحة 196 إلى 203)
+الفصل العاشر: الكهانة وادعاء علم الغيب في الإسلام (من صفحة 196 إلى 203)`;
 
-هل ترغب في معرفة المزيد عن إصدار إلكتروني للكتاب؟`;
+      case 5:
+        return "نعم، تتوفر نسخة إلكترونية من الكتاب. يمكنك الحصول عليها من خلال الرابط المتاح في الموقع.";
+
+      default:
+        return INITIAL_MESSAGE;
     }
-
-    // النسخة الإلكترونية
-    if (lowerQuestion.includes("إلكتروني") || lowerQuestion.includes("5")) {
-      return "نعم، تتوفر نسخة إلكترونية من الكتاب. يمكنك الحصول عليها من خلال الرابط المتاح في الموقع.\n\nهل تحتاج إلى مساعدة إضافية في شيء آخر؟";
-    }
-
-    return "يمكنك اختيار أحد الخيارات التالية:\n1. معلومات عن الكتاب\n2. كيفية الطلب\n3. معلومات الشحن والدفع\n4. فهرس الكتاب\n5. هل يتوفر إصدار إلكتروني؟";
   };
+
+  const handleOptionClick = (option: number) => {
+    const response = getResponse(option);
+    setMessages(prev => [...prev, 
+      { text: OPTIONS[option - 1].text, isUser: true },
+      { text: response, isUser: false }
+    ]);
+    speak(response);
+  };
+
+  useEffect(() => {
+    if (isOpen && !isMuted) {
+      speak(INITIAL_MESSAGE);
+    }
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, [isOpen, isMuted]);
 
   return (
     <div className="fixed bottom-4 left-4 z-50">
@@ -106,7 +123,17 @@ export const ChatBot = () => {
       ) : (
         <Card className="w-96 h-[600px] flex flex-col">
           <div className="p-3 bg-primary text-white flex justify-between items-center">
-            <span>خدمة العملاء</span>
+            <div className="flex items-center gap-2">
+              <span>خدمة العملاء</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMuted(!isMuted)}
+                className="hover:bg-primary/90 text-white"
+              >
+                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              </Button>
+            </div>
             <Button
               variant="ghost"
               size="icon"
@@ -134,18 +161,17 @@ export const ChatBot = () => {
               </div>
             ))}
           </div>
-          <div className="p-3 border-t flex gap-2">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSend()}
-              placeholder="اكتب رسالتك هنا..."
-              className="flex-1"
-              dir="rtl"
-            />
-            <Button onClick={handleSend} size="icon">
-              <Send className="w-4 h-4" />
-            </Button>
+          <div className="p-3 border-t grid grid-cols-2 gap-2">
+            {OPTIONS.map((option) => (
+              <Button
+                key={option.id}
+                onClick={() => handleOptionClick(option.id)}
+                variant="outline"
+                className="text-right justify-start"
+              >
+                {option.text}
+              </Button>
+            ))}
           </div>
         </Card>
       )}
