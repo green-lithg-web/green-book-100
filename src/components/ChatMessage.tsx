@@ -22,7 +22,7 @@ export const ChatMessage = ({ text, isUser }: ChatMessageProps) => {
         className={`rounded-2xl p-4 max-w-[80%] whitespace-pre-wrap shadow-sm font-arabic ${
           isUser
             ? "bg-gradient-to-r from-primary to-accent text-white"
-            : "bg-gradient-to-r from-secondary/20 to-secondary/10 text-gray-800"
+            : "bg-gradient-to-r from-white to-gray-50 text-gray-900 border border-gray-100"
         }`}
       >
         {isUser ? text : <TypewriterText text={text} />}
