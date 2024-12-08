@@ -1,83 +1,71 @@
 export const setupArabicSpeech = (text: string): SpeechSynthesisUtterance => {
   const utterance = new SpeechSynthesisUtterance(text);
   
-  // تعيين اللغة العربية
-  utterance.lang = 'ar-SA';  // تجربة اللهجة السعودية بدلاً من المصرية
-  utterance.rate = 0.8;      // إبطاء السرعة أكثر للوضوح
-  utterance.pitch = 1;
-  utterance.volume = 1;
+  // تعيين اللغة العربية والإعدادات الأساسية
+  utterance.lang = 'ar';  // استخدام اللغة العربية بشكل عام
+  utterance.rate = 0.8;   // سرعة النطق
+  utterance.pitch = 1;    // درجة الصوت
+  utterance.volume = 1;   // مستوى الصوت
 
-  // تحميل الأصوات المتاحة بشكل متزامن
-  let voices = window.speechSynthesis.getVoices();
-  if (voices.length === 0) {
-    // إذا لم يتم تحميل الأصوات بعد، انتظر حتى يتم تحميلها
-    window.speechSynthesis.onvoiceschanged = () => {
-      voices = window.speechSynthesis.getVoices();
-    };
-  }
+  // محاولة تحميل الأصوات المتاحة
+  const voices = speechSynthesis.getVoices();
   
-  // البحث عن صوت عربي
+  // البحث عن صوت عربي متاح
   const arabicVoice = voices.find(voice => 
-    voice.lang.includes('ar') || 
-    voice.name.toLowerCase().includes('arabic') ||
-    voice.name.includes('ar')
+    voice.lang.startsWith('ar') || 
+    voice.name.toLowerCase().includes('arabic')
   );
 
   if (arabicVoice) {
     console.log('تم العثور على صوت عربي:', arabicVoice.name);
     utterance.voice = arabicVoice;
   } else {
-    console.log('لم يتم العثور على صوت عربي، استخدام الصوت الافتراضي');
+    console.log('جاري استخدام الصوت الافتراضي');
   }
 
   return utterance;
 };
 
 export const speakArabicText = (text: string, onStart?: () => void, onEnd?: () => void) => {
-  // إلغاء أي نطق جارٍ
-  window.speechSynthesis.cancel();
+  // إيقاف أي نطق حالي
+  speechSynthesis.cancel();
 
-  // تنظيف النص من الرموز غير المرغوب فيها
+  // تنظيف النص
   const cleanText = text
-    .replace(/[^\u0600-\u06FF\s]/g, ' ')  // الاحتفاظ فقط بالحروف العربية والمسافات
-    .replace(/\s+/g, ' ')                  // تقليل المسافات المتعددة إلى مسافة واحدة
-    .trim();                               // إزالة المسافات من البداية والنهاية
+    .replace(/[^\u0600-\u06FF\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 
-  console.log('النص المنظف:', cleanText);
+  if (!cleanText) {
+    console.warn('النص فارغ');
+    if (onEnd) onEnd();
+    return;
+  }
 
+  // إنشاء كائن النطق
   const utterance = setupArabicSpeech(cleanText);
-  
-  if (onStart) {
-    utterance.onstart = () => {
-      console.log('بدأ النطق');
-      onStart();
-    };
-  }
-  
-  if (onEnd) {
-    utterance.onend = () => {
-      console.log('انتهى النطق');
-      onEnd();
-    };
-  }
-  
+
+  // تعيين معالجات الأحداث
+  utterance.onstart = () => {
+    console.log('بدأ النطق:', cleanText);
+    if (onStart) onStart();
+  };
+
+  utterance.onend = () => {
+    console.log('انتهى النطق');
+    if (onEnd) onEnd();
+  };
+
   utterance.onerror = (event) => {
     console.error('خطأ في النطق:', event);
     if (onEnd) onEnd();
   };
 
-  // محاولة النطق
+  // بدء النطق
   try {
-    // تأكد من أن النص غير فارغ
-    if (cleanText.trim()) {
-      window.speechSynthesis.speak(utterance);
-      console.log('تم بدء عملية النطق');
-    } else {
-      console.warn('النص فارغ، تم تخطي النطق');
-      if (onEnd) onEnd();
-    }
+    speechSynthesis.speak(utterance);
   } catch (error) {
-    console.error('خطأ في بدء النطق:', error);
+    console.error('خطأ في تشغيل النطق:', error);
     if (onEnd) onEnd();
   }
 };
