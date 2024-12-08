@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MessageCircle, X, Book, ShoppingCart, Truck, List, Smartphone, Bot } from "lucide-react";
+import { Headset, X, Book, ShoppingCart, Truck, List, Smartphone, Bot } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { ChatOptions } from "./ChatOptions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -100,7 +100,7 @@ export const ChatBot = () => {
           onClick={() => setIsOpen(true)}
           className="w-[200px] h-[50px] bg-teal-600 hover:bg-teal-700 shadow-lg flex items-center justify-center gap-2"
         >
-          <MessageCircle className="w-[1.5em] h-[1.5em]" />
+          <Headset className="w-[1.5em] h-[1.5em]" />
           <span>تحدث معنا</span>
         </Button>
       ) : (
